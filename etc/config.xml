@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <ingenico_epayments>
+            <settings>
+                <queued_refund_status_processing>processing</queued_refund_status_processing>
+                <queued_refund_status_complete>complete</queued_refund_status_complete>
+                <queued_refund_status_closed>closed</queued_refund_status_closed>
+                <refund_queue_cron_schedule>0 0,3,6 * * *</refund_queue_cron_schedule>
+            </settings>
+        </ingenico_epayments>
+    </default>
+</config>

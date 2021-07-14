@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Preferences: -->
+    <preference for="Ingenico\RefundQueue\Api\QueuedRefundRepositoryInterface" type="Ingenico\RefundQueue\Model\QueuedRefundRepository"/>
+    <preference for="Ingenico\RefundQueue\Api\RefundProcessorInterface" type="Ingenico\RefundQueue\Model\RefundProcessor"/>
+    <preference for="Ingenico\RefundQueue\Api\RefundQueueManagementInterface" type="Ingenico\RefundQueue\Model\RefundQueueManagement"/>
+
+    <!-- Dependency overrides: -->
+    <type name="Ingenico\Connect\Gateway\Command\IngenicoRefundCommand">
+        <arguments>
+            <argument name="createRefund" xsi:type="object">Ingenico\RefundQueue\Model\Action\Refund\CreateRefund</argument>
+        </arguments>
+    </type>
+    <type name="Ingenico\Connect\Plugin\Magento\Sales\Model\Service\CreditmemoService">
+        <arguments>
+            <argument name="createRefundAction" xsi:type="object">Ingenico\RefundQueue\Model\Action\Refund\CreateRefund</argument>
+        </arguments>
+    </type>
+
+    <!-- Plugins: -->
+    <type name="Magento\Sales\Model\Order\CreditmemoFactory">
+        <plugin name="update_shipping_totals_for_refund_queue"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order\CreditmemoFactory"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Creditmemo\Total\Shipping">
+        <plugin name="update_shipping_totals_for_refund_queue"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order\Creditmemo\Total\Shipping"/>
+    </type>
+    <type name="Magento\Sales\Api\CreditmemoManagementInterface">
+        <plugin name="cancel_refunds_in_refund_queue"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Service\CreditmemoService"/>
+    </type>
+    <type name="Magento\Sales\Api\Data\OrderItemInterface">
+        <plugin name="update_qty_refunded_for_queued_items"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order\Item" />
+    </type>
+    <type name="Magento\Sales\Model\Order\Creditmemo\Item">
+        <plugin name="mark_order_item_as_being_registered"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order\Creditmemo\Item" />
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\State">
+        <plugin name="update_order_status_according_to_refund_queue"
+                type="Ingenico\RefundQueue\Plugin\Magento\Sales\Model\ResourceModel\Order\Handler\State"/>
+    </type>
+</config>

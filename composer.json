@@ -1,0 +1,23 @@
+{
+  "name": "ingenico-epayments/connect-extension-magento2-refund-queue",
+  "description": "Ingenico Connect Extension Refund Queue for Magento 2",
+  "license": "MIT",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Ingenico\\RefundQueue\\": ""
+    }
+  },
+  "authors": [
+    {
+      "name": "Ingenico ePayments",
+      "email": "connect@ingenico.com",
+      "homepage": "https://epayments.developer-ingenico.com/",
+      "role": "Developer"
+    }
+  ],
+  "version": "0.1.0"
+}

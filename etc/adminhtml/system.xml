@@ -1,0 +1,41 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="ingenico_epayments">
+            <group id="advanced_settings">
+                <group id="order_processing">
+                    <group id="credit_memo">
+                        <field id="queued_refund_status_processing" translate="label commit tooltip" type="select" sortOrder="10" showInDefault="1">
+                            <label>Status for queued refunds in Processing state</label>
+                            <comment>Orders with queued refunds can be flagged with a different status.</comment>
+                            <tooltip>For the new status to show in the dropdown it will need to be created and configured in Magento.</tooltip>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
+                            <config_path>ingenico_epayments/settings/queued_refund_status_processing</config_path>
+                        </field>
+                        <field id="queued_refund_status_complete" translate="label commit tooltip" type="select" sortOrder="20" showInDefault="1">
+                            <label>Status for queued refunds in Complete state</label>
+                            <comment>Orders with queued refunds can be flagged with a different status.</comment>
+                            <tooltip>For the new status to show in the dropdown it will need to be created and configured in Magento.</tooltip>
+                            <source_model>Ingenico\RefundQueue\Model\Config\Source\Order\Status\Complete</source_model>
+                            <config_path>ingenico_epayments/settings/queued_refund_status_complete</config_path>
+                        </field>
+                        <field id="queued_refund_status_closed" translate="label commit tooltip" type="select" sortOrder="30" showInDefault="1">
+                            <label>Queued Refund Status: Closed</label>
+                            <comment><![CDATA[Order status for an order with state: <em>"Closed"</em> and a queued refund.]]></comment>
+                            <tooltip>When refunding is not yet possible, the Ingenico module adds the refund to a queue. In this state you can assign a dedicated order status.</tooltip>
+                            <source_model>Ingenico\RefundQueue\Model\Config\Source\Order\Status\Closed</source_model>
+                            <config_path>ingenico_epayments/settings/queued_refund_status_closed</config_path>
+                        </field>
+                        <field id="refund_queue_cron_schedule" translate="label commit tooltip" type="select" sortOrder="40" showInDefault="1">
+                            <label>Cron refund status Worldline</label>
+                            <comment>The frequency of checking for the most recent status to refund.</comment>
+                            <tooltip>The isRefundable property has to be true to progress. By default it is running once a day.</tooltip>
+                            <source_model>Ingenico\RefundQueue\Model\Config\Source\RefundQueueSchedule</source_model>
+                            <config_path>ingenico_epayments/settings/refund_queue_cron_schedule</config_path>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
