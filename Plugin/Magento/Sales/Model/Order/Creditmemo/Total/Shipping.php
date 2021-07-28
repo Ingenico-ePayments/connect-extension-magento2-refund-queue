@@ -6,6 +6,7 @@ namespace Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order\Creditmemo\Total
 
 use Ingenico\Connect\Model\ConfigProvider;
 use Ingenico\RefundQueue\Model\ShippingAmountService;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\Shipping as BaseShipping;
 
@@ -27,7 +28,8 @@ class Shipping
         Creditmemo $creditmemo
     ) {
         // Only apply to payments placed by Ingenico:
-        if (!$creditmemo->getOrder()->getPayment()->getMethod() === ConfigProvider::CODE) {
+        $payment = $creditmemo->getOrder()->getPayment();
+        if (!$payment instanceof OrderPaymentInterface || $payment->getMethod() !== ConfigProvider::CODE) {
             return $proceed($creditmemo);
         }
 

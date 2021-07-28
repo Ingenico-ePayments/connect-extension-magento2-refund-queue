@@ -8,6 +8,7 @@ use Ingenico\Connect\Model\ConfigProvider;
 use Ingenico\RefundQueue\Model\ForcedCreditMemoManagement;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 
 class SetForcedCreditMemo implements ObserverInterface
@@ -31,7 +32,8 @@ class SetForcedCreditMemo implements ObserverInterface
             return;
         }
 
-        if ($order->getPayment()->getMethod() !== ConfigProvider::CODE ||
+        $payment = $order->getPayment();
+        if (!$payment instanceof OrderPaymentInterface || $payment->getMethod() !== ConfigProvider::CODE ||
             $order->getData(ForcedCreditMemoManagement::KEY_IS_PROCESSED) === true ||
             !$order->canCreditmemo()
         ) {

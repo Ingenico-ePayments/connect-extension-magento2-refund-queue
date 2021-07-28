@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Ingenico\RefundQueue\Plugin\Magento\Sales\Controller\Adminhtml\Order;
 
 use Exception;
-use Ingenico\RefundQueue\Api\RefundQueueManagementInterface;
 use Ingenico\Connect\Model\ConfigProvider;
+use Ingenico\RefundQueue\Api\RefundQueueManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\View as ViewController;
 use Magento\Sales\Model\Order;
@@ -40,7 +41,7 @@ class View
         $order = $this->orderRepository->get($id);
 
         $payment = $order->getPayment();
-        if ($payment->getMethod() !== ConfigProvider::CODE) {
+        if (!$payment instanceof OrderPaymentInterface || $payment->getMethod() !== ConfigProvider::CODE) {
             return null;
         }
 

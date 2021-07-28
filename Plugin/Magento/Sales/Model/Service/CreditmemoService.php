@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Service;
 
+use Ingenico\Connect\Model\ConfigProvider;
 use Ingenico\RefundQueue\Api\QueuedRefundRepositoryInterface;
 use Ingenico\RefundQueue\Api\RefundQueueManagementInterface;
-use Ingenico\Connect\Model\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Service\CreditmemoService as MagentoCreditmemoService;
@@ -94,6 +95,10 @@ class CreditmemoService
     private function isOrderPaidWithIngenico(int $orderId): bool
     {
         $order = $this->orderRepository->get($orderId);
-        return $order->getPayment()->getMethod() === ConfigProvider::CODE;
+        $payment = $order->getPayment();
+        if (!$payment instanceof OrderPaymentInterface) {
+            return false;
+        }
+        return $payment->getMethod() === ConfigProvider::CODE;
     }
 }

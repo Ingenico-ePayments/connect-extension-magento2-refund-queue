@@ -6,6 +6,7 @@ namespace Ingenico\RefundQueue\Plugin\Magento\Sales\Model\Order;
 
 use Ingenico\Connect\Model\ConfigProvider;
 use Ingenico\RefundQueue\Api\RefundQueueManagementInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item as BaseOrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
@@ -48,7 +49,8 @@ class Item
             return $qtyRefunded;
         }
 
-        if ($subject->getOrder()->getPayment()->getMethod() !== ConfigProvider::CODE) {
+        $payment = $subject->getOrder()->getPayment();
+        if (!$payment instanceof OrderPaymentInterface || $payment->getMethod() !== ConfigProvider::CODE) {
             return $qtyRefunded;
         }
 

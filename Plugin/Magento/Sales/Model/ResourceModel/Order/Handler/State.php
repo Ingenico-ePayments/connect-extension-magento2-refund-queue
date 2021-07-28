@@ -7,6 +7,7 @@ namespace Ingenico\RefundQueue\Plugin\Magento\Sales\Model\ResourceModel\Order\Ha
 use Ingenico\Connect\Model\ConfigProvider;
 use Ingenico\RefundQueue\Model\Config;
 use Ingenico\RefundQueue\Model\ForcedCreditMemoManagement;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State as BaseState;
@@ -43,7 +44,8 @@ class State
         $returnValue,
         Order $order
     ) {
-        if ($order->getPayment()->getMethod() !== ConfigProvider::CODE) {
+        $payment = $order->getPayment();
+        if (!$payment instanceof OrderPaymentInterface || $payment->getMethod() !== ConfigProvider::CODE) {
             return $returnValue;
         }
 
